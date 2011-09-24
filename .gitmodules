@@ -1,0 +1,3 @@
+[submodule "cometd"]
+	path = src/3rdparty/cometd
+	url = git://github.com/cometd/cometd.git
