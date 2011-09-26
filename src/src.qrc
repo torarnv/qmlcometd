@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>cometd_p.js</file>
+        <file>cometd.qml</file>
+    </qresource>
+    <qresource prefix="/cometd">
+        <file alias="Cometd.js">3rdparty/cometd/cometd-javascript/common/src/main/js/org/cometd/Cometd.js</file>
+        <file alias="cometd-json.js">3rdparty/cometd/cometd-javascript/common/src/main/js/org/cometd/cometd-json.js</file>
+        <file alias="LongPollingTransport.js">3rdparty/cometd/cometd-javascript/common/src/main/js/org/cometd/LongPollingTransport.js</file>
+        <file alias="RequestTransport.js">3rdparty/cometd/cometd-javascript/common/src/main/js/org/cometd/RequestTransport.js</file>
+        <file alias="Transport.js">3rdparty/cometd/cometd-javascript/common/src/main/js/org/cometd/Transport.js</file>
+        <file alias="TransportRegistry.js">3rdparty/cometd/cometd-javascript/common/src/main/js/org/cometd/TransportRegistry.js</file>
+        <file alias="Utils.js">3rdparty/cometd/cometd-javascript/common/src/main/js/org/cometd/Utils.js</file>
+    </qresource>
+</RCC>
