@@ -106,5 +106,5 @@ function initialize(timerWindow) {
 }
 
 function handle(caller) {
-    _instance[caller.name].apply(_instance, caller.arguments);
+    return _instance[caller.name].apply(_instance, caller.arguments);
 }
