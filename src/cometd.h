@@ -2,6 +2,7 @@
 #define COMETD_H
 
 #include <QObject>
+#include <QScriptValue>
 
 class QDeclarativeEngine;
 
@@ -9,13 +10,13 @@ class Cometd : public QObject
 {
     Q_OBJECT
 public:
-    explicit Cometd(QDeclarativeEngine *engine, QObject *parent = 0);
+    explicit Cometd(QObject *parent = 0);
 
-    // TODO: Add public API for creating new instances
-    QObject *createInstance();
+    Q_INVOKABLE void setForwardFunction(const QScriptValue &function);
+    Q_INVOKABLE QScriptValue forward(const QScriptValue &name, const QScriptValue &arguments);
 
 private:
-    QDeclarativeEngine *m_engine;
+    QScriptValue m_forwardFunction;
 };
 
 #endif // COMETD_H

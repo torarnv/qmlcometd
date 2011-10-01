@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>cometd_p.js</file>
         <file>cometd.qml</file>
+        <file>cometd.js</file>
     </qresource>
     <qresource prefix="/cometd">
         <file alias="Cometd.js">3rdparty/cometd/cometd-javascript/common/src/main/js/org/cometd/Cometd.js</file>

@@ -1,25 +1,22 @@
 #include "cometdplugin.h"
-
 #include "cometd.h"
 
-#include <QDeclarativeEngine>
 #include <QDeclarativeComponent>
-#include <QDeclarativeContext>
+
+QDeclarativeEngine *CometdPlugin::s_engine = 0;
 
 void CometdPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     Q_UNUSED(uri);
 
-    Cometd *cometd = new Cometd(engine, this);
-    engine->rootContext()->setContextProperty("Cometd", cometd);
+    // FIXME: Can we detect if client code includes us based on the uri?
 
-    // Add a default instance
-    engine->rootContext()->setContextProperty("cometd", cometd->createInstance());
+    s_engine = engine;
 }
 
 void CometdPlugin::registerTypes(const char *uri)
 {
-    qmlRegisterUncreatableType<Cometd>(uri, 1, 0, "Cometd", QString());
+    qmlRegisterType<Cometd>(uri, 1, 0, "Cometd");
 }
 
 Q_EXPORT_PLUGIN2(cometdplugin, CometdPlugin);

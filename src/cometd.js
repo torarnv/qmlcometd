@@ -1,10 +1,3 @@
-.pragma library
-
-function typeOf(obj) {
-    var str = Object.prototype.toString.call(obj);
-    return str.match(/\s(.+?)\]/)[1].toLowerCase();
-}
-
 // Set up cometd namespace
 var org = org || {};
 org.cometd = {};
@@ -13,6 +6,11 @@ org.cometd = {};
 var window = {}
 window.location = {}
 window.location.host = ""
+
+function typeOf(obj) {
+    var str = Object.prototype.toString.call(obj);
+    return str.match(/\s(.+?)\]/)[1].toLowerCase();
+}
 
 // Redirect logging to QML
 window.console = {
@@ -105,6 +103,6 @@ function initialize(timerWindow) {
     _instance.registerTransport('long-polling', new LongPollingTransport());
 }
 
-function handle(caller) {
-    return _instance[caller.name].apply(_instance, caller.arguments);
+function forward(name, args) {
+    return _instance[name].apply(_instance, args);
 }

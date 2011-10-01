@@ -14,21 +14,25 @@ import Cometd 1.0
 Rectangle {
     id: app
 
-    property string echoService: "/service/echo"
+    Cometd {
+        id: echoService
 
-    function echo(message) {
-        cometd.publish(echoService, { msg: message });
-    }
+        property string channel: "/service/echo"
 
-    function handleEcho(message) {
-        echoText.text = message.data.msg + "\n" + echoText.text;
-    }
+        function echo(message) {
+            publish(channel, { msg: message });
+        }
 
-    Component.onCompleted: {
-        cometd.setLogLevel("debug");
-        cometd.configure("http://localhost:8080/cometd");
-        cometd.handshake();
-        cometd.subscribe(echoService, handleEcho);
+        function handleEcho(message) {
+            echoText.text = message.data.msg + "\n" + echoText.text;
+        }
+
+        Component.onCompleted: {
+            setLogLevel("debug");
+            configure("http://localhost:8080/cometd");
+            handshake();
+            subscribe(channel, handleEcho);
+        }
     }
 
     width: 500; height: 500
@@ -67,7 +71,7 @@ Rectangle {
             text: "Hello from Cometd!"
 
             Keys.onReturnPressed: {
-                app.echo(text)
+                echoService.echo(text)
             }
         }
     }

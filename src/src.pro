@@ -4,17 +4,17 @@ QT += declarative script
 
 TARGET = cometdplugin
 
-DESTDIR = ../Cometd
+DESTDIR = $$OUT_PWD/../Cometd/private
 
 HEADERS += \
+    timerwindow.h \
     cometdplugin.h \
-    cometd.h \
-    timerwindow.h
+    cometd.h
 
 SOURCES += \
     cometdplugin.cpp \
-    cometd.cpp \
-    timerwindow.cpp
+    timerwindow.cpp \
+    cometd.cpp
 
 RESOURCES += \
     src.qrc
@@ -22,8 +22,4 @@ RESOURCES += \
 OTHER_FILES += \
     3rdparty/cometd/cometd-javascript/common/src/main/js/org/cometd/* \
     cometd.qml \
-    cometd_p.js
-
-OBJECTS_DIR = .obj
-MOC_DIR = .moc
-RCC_DIR = .rcc
+    cometd.js
