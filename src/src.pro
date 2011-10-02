@@ -9,12 +9,14 @@ DESTDIR = $$OUT_PWD/../Cometd/private
 HEADERS += \
     timerwindow.h \
     cometdplugin.h \
-    cometd.h
+    cometd.h \
+    binding.h
 
 SOURCES += \
     cometdplugin.cpp \
     timerwindow.cpp \
-    cometd.cpp
+    cometd.cpp \
+    binding.cpp
 
 RESOURCES += \
     src.qrc

@@ -1,4 +1,6 @@
 #include "cometd.h"
+
+#include "binding.h"
 #include "cometdplugin.h"
 #include "timerwindow.h"
 
@@ -8,6 +10,7 @@
 
 Cometd::Cometd(QObject *parent)
     : QObject(parent)
+    , m_binding(new Binding(this))
 {
     QDeclarativeEngine *engine = CometdPlugin::engine();
     QDeclarativeContext *rootContext = engine->rootContext();
@@ -17,7 +20,7 @@ Cometd::Cometd(QObject *parent)
     cometdContext->setContextProperty("timerWindow", new TimerWindow(this));
 
     // Allow the implementation to pass back the forward-function
-    cometdContext->setContextProperty("wrapper", this);
+    cometdContext->setContextProperty("binding", m_binding);
 
     QDeclarativeComponent component(engine, QUrl("qrc:/cometd.qml"));
     QObject *implementation = component.create(cometdContext);
@@ -27,16 +30,7 @@ Cometd::Cometd(QObject *parent)
     QMetaObject::invokeMethod(implementation, "initialize");
 }
 
-void Cometd::setForwardFunction(const QScriptValue &function)
-{
-    Q_ASSERT(function.isFunction());
-    m_forwardFunction = function;
-}
-
 QScriptValue Cometd::forward(const QScriptValue &name, const QScriptValue &arguments)
 {
-    QScriptValueList args;
-    args << name << arguments;
-
-    return m_forwardFunction.call(QScriptValue(), args);
+    return m_binding->forward(name, arguments);
 }

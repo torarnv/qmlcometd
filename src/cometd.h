@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QScriptValue>
 
+class Binding;
+
 class QDeclarativeEngine;
 
 class Cometd : public QObject
@@ -12,11 +14,10 @@ class Cometd : public QObject
 public:
     explicit Cometd(QObject *parent = 0);
 
-    Q_INVOKABLE void setForwardFunction(const QScriptValue &function);
-    Q_INVOKABLE QScriptValue forward(const QScriptValue &name, const QScriptValue &arguments);
+    Q_INVOKABLE QScriptValue forward(const QScriptValue &name, const QScriptValue &arguments = QScriptValue());
 
 private:
-    QScriptValue m_forwardFunction;
+    Binding *m_binding;
 };
 
 #endif // COMETD_H
