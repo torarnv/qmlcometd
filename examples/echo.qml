@@ -59,6 +59,9 @@ Rectangle {
 
         property string channel: "/service/echo"
 
+        url: "http://localhost:8080/cometd"
+        logLevel: "debug"
+
         function echo(message) {
             publish(channel, { msg: message });
         }
@@ -68,8 +71,6 @@ Rectangle {
         }
 
         Component.onCompleted: {
-            setLogLevel("debug");
-            configure("http://localhost:8080/cometd");
             handshake();
             subscribe(channel, handleEcho);
         }

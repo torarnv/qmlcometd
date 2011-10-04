@@ -43,13 +43,51 @@ import QtQuick 1.1
 import "private"
 
 Item {
+    id: api
+
+    property string url
+    property string logLevel
+    property int maxConnections
+    property int backoffIncrement
+    property int maxBackoff
+    property bool reverseIncomingExtensions
+    property int maxNetworkDelay
+    property variant requestHeaders
+    property bool appendMessageTypeToURL
+    property bool autoBatch
+
+    onUrlChanged: pimpl.setConfigurationProperty()
+    onLogLevelChanged: pimpl.setConfigurationProperty()
+    onMaxConnectionsChanged: pimpl.setConfigurationProperty()
+    onBackoffIncrementChanged: pimpl.setConfigurationProperty()
+    onMaxBackoffChanged: pimpl.setConfigurationProperty()
+    onReverseIncomingExtensionsChanged: pimpl.setConfigurationProperty()
+    onMaxNetworkDelayChanged: pimpl.setConfigurationProperty()
+    onRequestHeadersChanged: pimpl.setConfigurationProperty()
+    onAppendMessageTypeToURLChanged: pimpl.setConfigurationProperty()
+    onAutoBatchChanged: pimpl.setConfigurationProperty()
+
     // Public API, matching the API from Cometd.js
+
+    function configure() {
+        pimpl.call();
+        pimpl.updateConfiguration();
+    }
+
+    function init() {
+        pimpl.call();
+        pimpl.updateConfiguration();
+    }
+
+    function setLogLevel() {
+        pimpl.call();
+        pimpl.updateConfiguration();
+    }
+
     function registerTransport() { return pimpl.call(); }
     function getTransportTypes() { return pimpl.call(); }
     function unregisterTransport() { return pimpl.call(); }
     function findTransport() { return pimpl.call(); }
-    function configure() { return pimpl.call(); }
-    function init() { return pimpl.call(); }
     function handshake() { return pimpl.call(); }
     function disconnect() { return pimpl.call(); }
     function startBatch() { return pimpl.call(); }
@@ -67,7 +105,6 @@ Item {
     function setBackoffIncrement() { return pimpl.call(); }
     function getBackoffIncrement() { return pimpl.call(); }
     function getBackoffPeriod() { return pimpl.call(); }
-    function setLogLevel() { return pimpl.call(); }
     function registerExtension() { return pimpl.call(); }
     function unregisterExtension() { return pimpl.call(); }
     function getExtension() { return pimpl.call(); }
@@ -78,12 +115,45 @@ Item {
     function getConfiguration() { return pimpl.call(); }
     function getAdvice() { return pimpl.call(); }
 
+    Component.onCompleted: {
+        pimpl.updateConfiguration()
+    }
+
     Cometd {
         id: pimpl
 
         function call() {
             var caller = arguments.callee.caller;
             return forward(caller.name, caller.arguments);
+        }
+
+        property bool updatingConfiguration: false
+
+        // Update the Cometd config based on the declarative property change
+        function setConfigurationProperty() {
+            if (updatingConfiguration)
+                return
+
+            var signalName = arguments.callee.caller.name
+            var propertyName = /^on(.+?)Changed$/.exec(signalName)[1]
+            propertyName = propertyName.charAt(0).toLowerCase() + propertyName.substr(1)
+
+            var config = {}
+            config[propertyName] = api[propertyName]
+            api.configure(config)
+        }
+
+        // Update the declarative properties based on the Cometd configuration
+        function updateConfiguration() {
+            updatingConfiguration = true
+            var config = getConfiguration()
+            for (var prop in config) {
+                if (prop == "advice")
+                    continue
+
+                api[prop] = config[prop]
+            }
+            updatingConfiguration = false
         }
     }
 }
