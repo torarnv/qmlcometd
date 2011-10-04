@@ -67,6 +67,8 @@ Item {
     onAppendMessageTypeToURLChanged: pimpl.setConfigurationProperty()
     onAutoBatchChanged: pimpl.setConfigurationProperty()
 
+    property bool connected: false
+
     // Public API, matching the API from Cometd.js
 
     function configure() {
@@ -115,12 +117,18 @@ Item {
     function getConfiguration() { return pimpl.call(); }
     function getAdvice() { return pimpl.call(); }
 
-    Component.onCompleted: {
-        pimpl.updateConfiguration()
-    }
-
     Cometd {
         id: pimpl
+
+        Component.onCompleted: {
+            updateConfiguration()
+            addListener('/meta/connect', updateConnectionStatus);
+            addListener('/meta/disconnect', updateConnectionStatus);
+        }
+
+        function updateConnectionStatus() {
+            api.connected = !isDisconnected();
+        }
 
         function call() {
             var caller = arguments.callee.caller;
