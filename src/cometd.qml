@@ -42,9 +42,16 @@ import QtQuick 1.1
 
 import "cometd.js" as CometdJS
 
-QtObject {
+Item {
     function initialize() {
         CometdJS.initialize(timerWindow);
         binding.setForwardFunction(CometdJS.forward)
+    }
+
+    Connections {
+        target: application
+        onAboutToQuit: {
+            CometdJS.forward("disconnect")
+        }
     }
 }

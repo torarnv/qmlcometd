@@ -44,6 +44,7 @@
 #include "cometdplugin.h"
 #include "timerwindow.h"
 
+#include <QApplication>
 #include <QDeclarativeEngine>
 #include <QDeclarativeComponent>
 #include <QDeclarativeContext>
@@ -61,6 +62,8 @@ Cometd::Cometd(QObject *parent)
 
     // Allow the implementation to pass back the forward-function
     cometdContext->setContextProperty("binding", m_binding);
+
+    cometdContext->setContextProperty("application", qApp);
 
     QDeclarativeComponent component(engine, QUrl("qrc:/cometd.qml"));
     QObject *implementation = component.create(cometdContext);
